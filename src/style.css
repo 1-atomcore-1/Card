@@ -1,0 +1,398 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  font-family: Arial, sans-serif;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1300px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.camera-container {
+  position: relative;
+  width: 100%;
+  max-width: 1300px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  background-color: #000;
+  /* Added display properties to ensure proper centering of canvas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Aspect ratio para desktop - 16:9 */
+.camera-container.desktop {
+  aspect-ratio: 16/9;
+}
+
+/* Aspect ratio para mobile - 9:16 */
+.camera-container.mobile {
+  aspect-ratio: 9/16 !important;
+  max-width: 500px;
+  width: 100%;
+  min-height: 70vh; /* Garante altura mínima para dispositivos Android */
+}
+
+/* Correção específica para Android */
+.camera-container.android-device {
+  aspect-ratio: 9/16 !important;
+  box-sizing: border-box !important;
+  margin: 0 auto !important;
+}
+
+.camera-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Changed from cover to contain to prevent zoom */
+}
+
+#canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important; /* Changed from cover to contain to prevent zoom */
+  border-radius: 24px;
+  /* Added to improve rendering performance */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* Added to ensure the canvas isn't stretched or zoomed */
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+/* Prevent specific rendering issues with Camera Kit */
+canvas.camerakit-canvas {
+  object-fit: contain !important;
+}
+
+.controls {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+.loading-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  color: white;
+  font-size: 18px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 252, 0, 0.3);
+  border-radius: 50%;
+  border-top-color: #FFFC00;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  color: #ff4d4d;
+  text-align: center;
+  max-width: 80%;
+}
+
+/* Capture controls */
+.capture-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  width: 100%;
+  position: relative;
+}
+
+.capture-button {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: white;
+  border: 4px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.capture-button:hover {
+  transform: scale(1.05);
+}
+
+.capture-button:active {
+  transform: scale(0.95);
+  background-color: #f0f0f0;
+}
+
+.capture-button.recording {
+  background-color: #ff4d4d;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.mode-switch {
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  padding: 5px;
+  z-index: 10;
+  margin-top: 3px;
+}
+
+.mode-option {
+  padding: 8px 15px;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.mode-option.active {
+  background-color: white;
+  color: black;
+}
+
+.camera-flip {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: absolute;
+  right: 40%;
+}
+
+.camera-flip:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+  transform: scale(1.1);
+}
+
+.preview-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+.preview-content {
+  max-width: 90%;
+  max-height: 70%;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+/* Ajuste a proporção do preview conforme tipo de dispositivo */
+.preview-container .preview-content {
+  aspect-ratio: auto; /* Permite que a proporção siga o conteúdo original */
+}
+
+.preview-controls {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.preview-button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.download-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.close-button {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Powered by section */
+.powered-by {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 12px;
+  gap: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  z-index: 5;
+  position: relative;
+}
+
+.snapchat-logo {
+  height: 20px;
+  margin-left: 5px;
+}
+
+/* Performance optimizations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hardware acceleration for animations */
+.capture-button, .camera-flip, .preview-button {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Ajuste para orientação do dispositivo */
+@media (orientation: portrait) {
+  .camera-container.mobile {
+    aspect-ratio: 9/16 !important;
+    height: auto;
+    min-height: 80vh; /* Aumenta a altura mínima em orientação retrato */
+    width: 100%;
+  }
+  
+  .preview-content {
+    max-height: 80%;
+    width: auto;
+  }
+}
+
+/* Correção específica para Android */
+@media (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+  .camera-container.mobile {
+    aspect-ratio: 9/16 !important;
+    height: 80vh !important; /* Força altura fixa em dispositivos Android */
+    max-width: 100%;
+    width: auto !important; /* Largura ajustada automaticamente com base na altura */
+  }
+}
+
+@media (orientation: landscape) {
+  .camera-container.mobile {
+    aspect-ratio: 16/9;
+    width: 90%;
+    max-width: 900px;
+  }
+  
+  .preview-content {
+    max-width: 80%;
+    height: auto;
+  }
+}
+
+/* Responsividade para telas menores */
+@media (max-height: 700px) {
+  .camera-container {
+    margin: 15px auto 0;
+  }
+  
+  .controls {
+    bottom: 15px;
+    gap: 6px;
+  }
+  
+  .capture-button {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .camera-flip {
+    width: 35px;
+    height: 35px;
+    right: 33%;
+  }
+  
+  .powered-by {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+}
+
+/* Responsividade para telas móveis */
+@media (max-width: 600px) {
+  .app-container {
+    padding: 0 10px;
+  }
+  
+  .camera-container {
+    width: 100%;
+    margin: 15px auto 0;
+  }
+  
+  .capture-controls {
+    margin-bottom: 3px;
+  }
+  
+  .camera-flip {
+    width: 35px;
+    height: 35px;
+    right: 30%;
+  }
+}
