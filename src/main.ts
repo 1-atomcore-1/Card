@@ -567,10 +567,11 @@ import './style.css';
     let lensActive = true;
 
     // CSS fix to prevent unwanted zoom (add to existing style.css or add inline)
-    const styleFixForZoom = document.createElement('style');
+    const styleFixForZoom = document.createElement('style');    
+    // Correção object fit de container para cover;
     styleFixForZoom.textContent = `
       #canvas {
-        object-fit: cover !important; 
+        object-fit: cover !important;
         width: 100% !important;
         height: 100% !important;
         max-width: 100% !important;
