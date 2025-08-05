@@ -66,7 +66,7 @@ body {
 #canvas {
   width: 100%;
   height: 100%;
-  object-fit: contain !important; /* Changed from cover to contain to prevent zoom */
+  object-fit: cover !important; /* Changed from cover to contain to prevent zoom */ /* Correção de bug 1x1 em android. Contain to cover*/
   border-radius: 24px;
   /* Added to improve rendering performance */
   transform: translateZ(0);
