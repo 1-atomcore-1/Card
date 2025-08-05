@@ -241,8 +241,10 @@ canvas.camerakit-canvas {
 }
 
 .preview-content {
+  width: 90%;
+  height: 90%;
   max-width: 90%;
-  max-height: 70%;
+  max-height: 90%;
   object-fit: cover;
   border-radius: 12px;
 }
