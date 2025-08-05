@@ -570,7 +570,7 @@ import './style.css';
     const styleFixForZoom = document.createElement('style');
     styleFixForZoom.textContent = `
       #canvas {
-        object-fit: contain !important; 
+        object-fit: cover !important; 
         width: 100% !important;
         height: 100% !important;
         max-width: 100% !important;
