@@ -5,7 +5,7 @@ import './style.css';
   // Create loading indicator
   const loadingIndicator = document.createElement('div');
   loadingIndicator.className = 'loading-indicator';
-  loadingIndicator.innerHTML = '<div class="spinner"></div><p>Loading Camera Kit...</p>';
+  loadingIndicator.innerHTML = '<div class="spinner"></div><p>Aponte a câmera para o cartão de visitas...</p>';
   document.body.appendChild(loadingIndicator);
 
   try {
@@ -14,7 +14,7 @@ import './style.css';
     });
     
     // Update loading message
-    loadingIndicator.querySelector('p')!.textContent = 'Initializing camera...';
+    loadingIndicator.querySelector('p')!.textContent = 'Aponte a câmera para o cartão de visitas...';
     
     // Create main app container
     const appContainer = document.createElement('div');
